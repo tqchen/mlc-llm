@@ -24,7 +24,7 @@ class DispatchTIROperator:  # pylint: disable=too-few-public-methods
         mod: IRModule,
         ctx: tvm.transform.PassContext,
     ) -> IRModule:
-        for gv in mod.functions:
+        for gv in sorted(mod.functions, key=lambda x: x.name_hint):
             scheduled_func = self.lookup(mod[gv])
             if scheduled_func is not None:
                 mod[gv] = scheduled_func

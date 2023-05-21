@@ -264,7 +264,7 @@ def build(mod_deploy: tvm.IRModule, args: argparse.Namespace) -> None:
     if args.system_lib_prefix:
         mod_deploy = mod_deploy.with_attrs({"system_lib_prefix": args.system_lib_prefix})
 
-    debug_dump_script(mod_deploy, "mod_before_build.py", args)
+    debug_dump_script(mod_deploy, f"mod_before_build_{args.target_kind}.py", args)
     if target_kind != "cpu":
         if os.path.exists(args.db_path):
             db = ms.database.create(  # pylint: disable=invalid-name

@@ -465,6 +465,24 @@ def parse_target(args: argparse.Namespace) -> None:
             host="llvm -mtriple=aarch64-linux-android",  # TODO: Only support arm64 for now
         )
         args.target_kind = "android"
+    elif args.target in ["armcl"]:  # android-opencl
+        from tvm.contrib import tar
+        args.target = tvm.target.Target(
+            tvm.target.Target(
+                {
+                    "kind": "opencl",
+                    "max_threads_per_block": 1024,
+                    "max_shared_memory_per_block": 32768,
+                    "thread_warp_size": 1,
+                }
+        ),
+            host="llvm -mtriple=aarch64-linux-gnu",  # TODO: Only support arm64 for now
+        )
+        args.export_kwargs = {
+            "fcompile": tar.tar,
+        }
+        args.lib_format = "tar"
+        args.target_kind = "armcl"
     else:
         args.target = tvm.target.Target(args.target, host="llvm")
         args.target_kind = args.target.kind.default_keys[0]

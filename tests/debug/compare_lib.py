@@ -100,10 +100,21 @@ class TestState:
             self.sess.upload(local_lib_path)
             self.lib = self.sess.load_module(lib_name)
             self.cmp_device = self.sess.metal()
+        elif args.cmp_device == "armcl":
+            lib_name = f"{args.model}-{args.quantization.name}-{args.cmp_device}.tar"
+            local_lib_path = os.path.join(args.artifact_path, lib_name)
+            local_lib_path = os.path.join(args.artifact_path, lib_name)
+            tracker_host = os.environ.get("TVM_TRACKER_HOST", "localhost")
+            tracker_port = int(os.environ.get("TVM_TRACKER_PORT", "9190"))
+            tracker = rpc.connect_tracker(tracker_host, tracker_port)
+            self.sess = tracker.request("orangepi")
+            self.sess.upload(local_lib_path)
+            self.lib = self.sess.load_module(lib_name)
+            self.cmp_device = self.sess.cl()
         elif args.cmp_device == "android":
             lib_name = f"{args.model}-{args.quantization.name}-{args.cmp_device}.so"
             local_lib_path = os.path.join(args.artifact_path, lib_name)
-            tracker_host = os.environ.get("TVM_TRACKER_HOST", "0.0.0.0")
+            tracker_host = os.environ.get("TVM_TRACKER_HOST", "localhost")
             tracker_port = int(os.environ.get("TVM_TRACKER_PORT", "9190"))
             tracker = rpc.connect_tracker(tracker_host, tracker_port)
             self.sess = tracker.request("android")
@@ -136,7 +147,7 @@ def deploy_to_pipeline(args) -> None:
     const_params = utils.load_params(args.artifact_path, primary_device)
     state = TestState(args)
     tokenizer = AutoTokenizer.from_pretrained(
-        os.path.join(args.artifact_path, "params"), trust_remote_code=True
+        os.path.join(args.artifact_path, "params"), trust_remote_code=True, use_fast=False
     )
 
     print("Tokenizing...")

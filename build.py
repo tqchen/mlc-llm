@@ -350,7 +350,7 @@ def main():
     os.makedirs(ARGS.artifact_path, exist_ok=True)
     os.makedirs(os.path.join(ARGS.artifact_path, "debug"), exist_ok=True)
     cache_path = os.path.join(
-        ARGS.artifact_path, f"mod_cache_before_build_{ARGS.target_kind}.pkl"
+        ARGS.artifact_path, f"mod_cache_before_build_cuda.pkl"
     )
     ARGS.raw_params_path = os.path.join(ARGS.artifact_path, "raw_params")
     use_cache = ARGS.use_cache and os.path.isfile(cache_path)

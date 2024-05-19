@@ -8,7 +8,7 @@ import MLCSwift
 
 enum MessageRole {
     case user
-    case bot
+    case assistant
 }
 
 extension MessageRole {
@@ -116,7 +116,7 @@ final class ChatState: ObservableObject {
         assert(isChattable)
         switchToGenerating()
         appendMessage(role: .user, message: prompt)
-        appendMessage(role: .bot, message: "")
+        appendMessage(role: .assistant, message: "")
         
         Task {
             self.historyMessages.append(
@@ -139,7 +139,7 @@ final class ChatState: ObservableObject {
                 }
                 let newText = self.streamingText
                 DispatchQueue.main.async {
-                    self.updateMessage(role: .bot, message: newText)
+                    self.updateMessage(role: .assistant, message: newText)
                 }
             }
             
@@ -285,7 +285,7 @@ private extension ChatState {
         
         Task {
             DispatchQueue.main.async {
-                self.appendMessage(role: .bot, message: "[System] Initalize...")
+                self.appendMessage(role: .assistant, message: "[System] Initalize...")
             }
             
             await engine.unload()
@@ -299,7 +299,7 @@ private extension ChatState {
                     "so we cannot initialize this model on this device."
                 )
                 DispatchQueue.main.sync {
-                    self.displayMessages.append(MessageData(role: MessageRole.bot, message: errorMessage))
+                    self.displayMessages.append(MessageData(role: MessageRole.assistant, message: errorMessage))
                     self.switchToFailed()
                 }
                 return
@@ -307,7 +307,7 @@ private extension ChatState {
             await engine.reload(modelPath: modelPath, modelLib: modelLib)
             // TODO(mlc-team) run a system message prefill
             DispatchQueue.main.async {
-                self.updateMessage(role: .bot, message: "[System] Ready to chat")
+                self.updateMessage(role: .assistant, message: "[System] Ready to chat")
                 self.switchToReady()
             }
         }

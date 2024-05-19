@@ -66,7 +66,7 @@ private extension ChatView {
             ScrollView {
                 VStack {
                     let messageCount = chatState.displayMessages.count
-                    let hasSystemMessage = messageCount > 0 && chatState.displayMessages[0].role == MessageRole.bot
+                    let hasSystemMessage = messageCount > 0 && chatState.displayMessages[0].role == MessageRole.assistant
                     let startIndex = hasSystemMessage ? 1 : 0
 
                     // display the system message

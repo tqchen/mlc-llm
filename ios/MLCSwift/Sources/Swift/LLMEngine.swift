@@ -56,6 +56,10 @@ public actor MLCEngine {
         """
         jsonFFIEngine.reload(engineConfig)
     }
+    
+    public func reset() {
+        jsonFFIEngine.reset()
+    }
 
     public func unload() {
         jsonFFIEngine.unload()

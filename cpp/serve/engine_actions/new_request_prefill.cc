@@ -262,6 +262,11 @@ class NewRequestPrefillActionObj : public BatchPrefillBaseActionObj {
           rsentry->mstates[0]->internal_id, tokens, models_[0]->GetSlidingWindowSize(),
           models_[0]->GetAttentionSinkSize());
 
+      LOG(INFO) << "prefill_offset=" << result.prefilled_offset
+                << " reuse_seq_id=" << result.reused_seq_id
+                << " fork_seq_id=" << result.forked_seq_id
+                << " reused_seq_pop_last_tokens=" << result.reused_seq_pop_last_tokens;
+
       if (result.prefilled_offset == 0) {
         // Add new sequence
         CHECK_EQ(result.forked_seq_id, -1);

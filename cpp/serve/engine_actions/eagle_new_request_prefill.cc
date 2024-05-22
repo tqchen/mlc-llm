@@ -376,6 +376,7 @@ class EagleNewRequestPrefillActionObj : public BatchPrefillBaseActionObj {
       PrefixCacheMatchedResult result = estate->prefix_cache->InsertSequence(
           rsentry->mstates[0]->internal_id, tokens, models_[0]->GetSlidingWindowSize(),
           models_[0]->GetAttentionSinkSize());
+
       if (result.prefilled_offset == 0) {
         // Add new sequence.
         // Note: Almost same as without eagle speculative decoding. But in prefill step, the
